@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "341839584936",
+    "project_id": "wizalog-your-reading-hab-f4534",
+    "storage_bucket": "wizalog-your-reading-hab-f4534.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341839584936:android:77defea198929214242c9d",
+        "android_client_info": {
+          "package_name": "com.example.wizalog_your_reading_habit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "341839584936-qohthqog2m0igfkrhga4rul88eodr6m5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.wizalog_your_reading_habit",
+            "certificate_hash": "6a11d331494733bd30e8057efcf644c32f5f490b"
+          }
+        },
+        {
+          "client_id": "341839584936-t859c16svq1tfbviar2p6ohkhotb56a9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4FeGLEq7DRnRXKOb9rbm4Aw2G37ipzAM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "341839584936-t859c16svq1tfbviar2p6ohkhotb56a9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
