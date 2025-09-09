@@ -43,3 +43,33 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Flutter specific ignores
+.flutter-plugins-data.json
+.packages
+.ios/Flutter/Generated.xcconfig
+.ios/Flutter/Flutter.podspec
+.ios/.symlinks/
+.ios/.build/
+
+# Build artifacts
+build/
+
+# IDE and OS specific ignores
+.vscode/
+Thumbs.db
+
+# Firebase specific ignores
+.firebase/
+.runtimeconfig.json
+firebase-debug.log
+firebase-debug.*.log
+
+# Node.js dependencies (if you're using Cloud Functions or other JS tooling)
+node_modules/
+
+# Android specific ignores
+android/.gradle/
+android/local.properties
+
+# General logs
