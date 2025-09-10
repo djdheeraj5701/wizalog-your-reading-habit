@@ -112,112 +112,114 @@ class _HomePageState extends State<HomePage>
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (BuildContext bc) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(bc).viewInsets.bottom,
-                ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+        return SafeArea(
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(bc).viewInsets.bottom,
                   ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Text(
-                        sheetHeader,
-                        style: Theme.of(context).textTheme.headlineSmall,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 20),
-                      if (imageUrlPreview != null &&
-                          imageUrlPreview!.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: Image.network(
-                              imageUrlPreview!,
-                              fit: BoxFit.contain,
-                              height: 150,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Container(
-                                    height: 150,
-                                    color: Colors.grey[200],
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.error,
-                                        color: Colors.red,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Text(
+                          sheetHeader,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 20),
+                        if (imageUrlPreview != null &&
+                            imageUrlPreview!.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.network(
+                                imageUrlPreview!,
+                                fit: BoxFit.contain,
+                                height: 150,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Container(
+                                      height: 150,
+                                      color: Colors.grey[200],
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.error,
+                                          color: Colors.red,
+                                        ),
                                       ),
                                     ),
-                                  ),
+                              ),
+                            ),
+                          ),
+                        TextField(
+                          controller: nameController,
+                          decoration: InputDecoration(
+                            labelText: 'Book Name',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
                         ),
-                      TextField(
-                        controller: nameController,
-                        decoration: InputDecoration(
-                          labelText: 'Book Name',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: totalPagesController,
+                          decoration: InputDecoration(
+                            labelText: 'Total Pages',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          keyboardType: TextInputType.number,
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: imageUrlController,
+                          onChanged: (value) {
+                            setState(() {
+                              imageUrlPreview = value;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Image URL (Optional)',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      TextField(
-                        controller: totalPagesController,
-                        decoration: InputDecoration(
-                          labelText: 'Total Pages',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
+                        const SizedBox(height: 24),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            final bookName = nameController.text;
+                            final totalPages =
+                                int.tryParse(totalPagesController.text) ?? 0;
+                            final imageUrl = imageUrlController.text;
+                            if (bookName.isNotEmpty && totalPages > 0) {
+                              _addBook(bookName, totalPages, imageUrl, status);
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          icon: const Icon(Icons.add_task),
+                          label: const Text('Add Book'),
                         ),
-                        keyboardType: TextInputType.number,
-                      ),
-                      const SizedBox(height: 16),
-                      TextField(
-                        controller: imageUrlController,
-                        onChanged: (value) {
-                          setState(() {
-                            imageUrlPreview = value;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Image URL (Optional)',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          final bookName = nameController.text;
-                          final totalPages =
-                              int.tryParse(totalPagesController.text) ?? 0;
-                          final imageUrl = imageUrlController.text;
-                          if (bookName.isNotEmpty && totalPages > 0) {
-                            _addBook(bookName, totalPages, imageUrl, status);
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        icon: const Icon(Icons.add_task),
-                        label: const Text('Add Book'),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         );
       },
     );

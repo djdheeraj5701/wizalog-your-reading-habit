@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:wizalog_your_reading_habit/models/book.dart';
 import 'package:wizalog_your_reading_habit/models/book_status.dart';
 import 'package:wizalog_your_reading_habit/models/read_log.dart';
@@ -62,6 +63,7 @@ class ActiveBooksTab extends StatelessWidget {
         int pagesRead = 0;
         double progress = book.totalPagesRead / book.totalPages;
         String errorMessage = '';
+        DateTime selectedDate = DateTime.now();
 
         return StatefulBuilder(
           builder: (context, setState) {
@@ -107,6 +109,45 @@ class ActiveBooksTab extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          DateFormat('MMM dd, yyyy hh:mm a').format(selectedDate),
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.calendar_today),
+                        onPressed: () async {
+                          final DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: selectedDate,
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime.now(),
+                          );
+                          if (pickedDate != null) {
+                            final TimeOfDay? pickedTime = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.fromDateTime(selectedDate),
+                            );
+                            if (pickedTime != null) {
+                              setState(() {
+                                selectedDate = DateTime(
+                                  pickedDate.year,
+                                  pickedDate.month,
+                                  pickedDate.day,
+                                  pickedTime.hour,
+                                  pickedTime.minute,
+                                );
+                              });
+                            }
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
                   Text(
                       'Progress: ${book.totalPagesRead + pagesRead} / ${book.totalPages} pages'),
                   const SizedBox(height: 10),
@@ -128,7 +169,7 @@ class ActiveBooksTab extends StatelessWidget {
                 ElevatedButton(
                   onPressed: pagesRead > 0 && errorMessage.isEmpty
                       ? () async {
-                    await _logRead(book, pagesRead);
+                    await _logRead(book, pagesRead, selectedDate);
                     Navigator.of(context).pop();
                   }
                       : null,
@@ -175,13 +216,13 @@ class ActiveBooksTab extends StatelessWidget {
     }
   }
 
-  Future<void> _logRead(Book book, int pagesRead) async {
+  Future<void> _logRead(Book book, int pagesRead, DateTime timestamp) async {
     try {
       final readLogBox = Hive.box<ReadLog>('readLogs');
       final newLog = ReadLog()
         ..bookId = book.key.toString()
         ..pagesRead = pagesRead
-        ..timestamp = DateTime.now();
+        ..timestamp = timestamp;
 
       await readLogBox.add(newLog);
 
