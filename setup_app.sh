@@ -8,3 +8,5 @@ echo "Creating splash screen"
 dart run flutter_native_splash:create --path=flutter_native_splash.yaml
 
 echo "Done!"
+
+dart run build_runner build
